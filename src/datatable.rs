@@ -11,6 +11,10 @@ impl DataTable {
 		}
 	}
 
+	pub fn cols(&self) -> usize {
+		self.data_cols.len()
+	}
+
 }
 
 /// DataType enum
@@ -35,5 +39,9 @@ impl<T> DataCols<T> {
 			data_type: DataType::Reals,
 			data: Vec::<T>::new(),
 		}
+	}
+
+	pub fn len(&self) -> usize {
+		self.data.len()
 	}
 }
