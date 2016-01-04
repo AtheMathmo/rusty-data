@@ -15,28 +15,25 @@ impl DataTable {
 		self.data_cols.len()
 	}
 
+	pub fn rows(&self) -> usize {
+		if self.data_cols.len() > 0 {
+			return self. data_cols[0].len();
+		}
+
+		0usize
+	}
+
 }
 
-/// DataType enum
-///
-/// Not sure how this should be used.
-enum DataType {
-	Reals,
-	Categorical,
-}
 
 /// A data column with a consistent data type. 
 pub struct DataCols<T> {
-	data_type : DataType,
 	pub data: Vec<T>,
-	// If categorical - some kind of set for each category
-
 }
 
 impl<T> DataCols<T> {
 	pub fn empty() -> DataCols<T> {
 		DataCols {
-			data_type: DataType::Reals,
 			data: Vec::<T>::new(),
 		}
 	}

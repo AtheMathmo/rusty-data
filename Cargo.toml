@@ -1,6 +1,12 @@
 [package]
 name = "rusty-data"
-version = "0.1.0"
-authors = ["james <LucasJ94@hotmail.co.uk>"]
+version = "0.0.1"
+authors = ["AtheMathmo"]
+
+description = "A data handling library (designed for machine learning)."
+repository = "https://github.com/AtheMathmo/rusty-data"
+keywords = ["data","machine","learning"]
+readme = "README.md"
+license = "MIT"
 
 [dependencies]

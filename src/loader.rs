@@ -5,7 +5,11 @@ use std::fs::File;
 use std::str::FromStr;
 use datatable::*;
 
+/// Loader struct
+///
+/// Used to load and process data files into tables.
 pub struct Loader<'a> {
+    pub header: bool,
     pub file: &'a str,
     pub delimiter: char,
 }
@@ -83,6 +87,7 @@ impl<'a> Loader<'a> {
 /// ```
 pub fn load_file(file: &str) -> DataTable {
     let loader = Loader {
+        header: false,
         file: file,
         delimiter: ',',
     };
