@@ -31,7 +31,6 @@ pub trait ColumnData {
     fn push(&mut self, val: &str) -> Result<(), DataType>;
 }
 
-#[derive(PartialEq)]
 pub enum DataType {
     Float,
     Integer,

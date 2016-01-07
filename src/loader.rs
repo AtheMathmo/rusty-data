@@ -72,6 +72,13 @@ impl<'a> Loader<'a> {
 
         Ok(table)
     }
+
+    fn push_to_column(cd: &mut ColumnData, val: &str) {
+        match cd.push(val) {
+            Ok(x) => {},
+            Err(y) => {},
+        }
+    }
 }
 
 /// Load the specified file to a DataTable.
