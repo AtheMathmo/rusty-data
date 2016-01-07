@@ -28,7 +28,7 @@ impl DataTable {
 pub trait ColumnData {
     fn len(&self) -> usize;
 
-    fn push(&mut self, val: &str) -> Result<DataType, DataType>;
+    fn push(&mut self, val: &str) -> Result<(), DataType>;
 }
 
 #[derive(PartialEq)]
@@ -59,14 +59,14 @@ impl<T: NumCast> ColumnData for ColumnBase<T> {
         self.data.len()
     }
 
-    fn push(&mut self, val: &str) -> Result<DataType, DataType> {
+    fn push(&mut self, val: &str) -> Result<(), DataType> {
         match self.top_type {
 
             DataType::Integer => {
                 match i64::from_str(val) {
                     Ok(x) => {
                         self.data.push(num::cast(x).unwrap());
-                        Ok(DataType::Integer)
+                        Ok(())
                     }
                     Err(_) => Err(DataType::Float)                 
                 }
@@ -76,7 +76,7 @@ impl<T: NumCast> ColumnData for ColumnBase<T> {
                 match f64::from_str(val) {
                     Ok(x) => {
                         self.data.push(num::cast(x).unwrap());
-                        Ok(DataType::Float)
+                        Ok(())
                     }
                     Err(_) => Err(DataType::String)
                 }
