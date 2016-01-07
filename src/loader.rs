@@ -41,12 +41,12 @@ impl<'a> Loader<'a> {
             let values = line.split(self.delimiter);
 
             for val in values {
-                let mut column = DataCols::<f64>::empty();
+                let mut column = ColumnBase::<f64>::empty();
                 // Unwrap and panic for now.
                 // Should handle more carefully in future.
                 column.data.push(f64::from_str(val).unwrap());
 
-                table.data_cols.push(column);
+                table.data_cols.push(Box::new(column));
             }
         }
 
@@ -61,10 +61,8 @@ impl<'a> Loader<'a> {
                 if idx > table.cols() {
                     return Err(Error::new(ErrorKind::InvalidInput, "Malformed data format on."));
                 }
-                // Unwrap and panic for now.
-                // Should handle more carefully in future.
-                let val = f64::from_str(val).unwrap();
-                table.data_cols[idx].data.push(val);
+
+                table.data_cols[idx].push(val);
             }
 
             if idx != table.cols()-1 {

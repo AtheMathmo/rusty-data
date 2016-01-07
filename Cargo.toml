@@ -10,3 +10,4 @@ readme = "README.md"
 license = "MIT"
 
 [dependencies]
+num = {version = "0.1.28", default-features = false }
