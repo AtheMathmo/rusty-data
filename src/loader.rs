@@ -41,12 +41,12 @@ impl<'a> Loader<'a> {
             let values = line.split(self.delimiter);
 
             for val in values {
-                let mut column = ColumnBase::<f64>::empty();
+                let mut column = DataColumn::empty();
                 // Unwrap and panic for now.
                 // Should handle more carefully in future.
-                column.data.push(f64::from_str(val).unwrap());
+                column.push(val);
 
-                table.data_cols.push(Box::new(column));
+                table.data_cols.push(column);
             }
         }
 
@@ -71,13 +71,6 @@ impl<'a> Loader<'a> {
         }
 
         Ok(table)
-    }
-
-    fn push_to_column(cd: &mut ColumnData, val: &str) {
-        match cd.push(val) {
-            Ok(x) => {},
-            Err(y) => {},
-        }
     }
 }
 
