@@ -2,7 +2,6 @@ use std::io;
 use std::io::prelude::*;
 use std::io::{BufReader, Error, ErrorKind};
 use std::fs::File;
-use std::str::FromStr;
 use datatable::*;
 
 /// Loader struct
@@ -70,6 +69,7 @@ impl<'a> Loader<'a> {
             }
         }
 
+        table.shrink_to_fit();
         Ok(table)
     }
 }
