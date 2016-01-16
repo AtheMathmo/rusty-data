@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["datatable","The datatable module."],["loader","The loader module"]]});

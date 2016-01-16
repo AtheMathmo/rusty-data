@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `DataTable` struct in crate `rusty_data`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, DataTable">
+
+    <title>rusty_data::datatable::DataTable - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../index.html'>rusty_data</a>::<wbr><a href='index.html'>datatable</a></p><script>window.sidebarCurrent = {name: 'DataTable', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>rusty_data</a>::<wbr><a href='index.html'>datatable</a>::<wbr><a class='struct' href=''>DataTable</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-71' class='srclink' href='../../src/rusty_data/datatable.rs.html#13-16' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct DataTable {
+    pub data_cols: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../../rusty_data/datatable/struct.DataColumn.html' title='rusty_data::datatable::DataColumn'>DataColumn</a>&gt;,
+}</pre><div class='docblock'><p>A data table consisting of varying column types and headers.</p>
+</div><h2 class='fields'>Fields</h2>
+<table><tr class='stab '>
+                                  <td id='structfield.data_cols'><code>data_cols</code></td><td><div class='docblock'><p>Vector of DataColumns.</p>
+</div></td></tr></table><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../../rusty_data/datatable/struct.DataTable.html' title='rusty_data::datatable::DataTable'>DataTable</a></code></h3><div class='impl-items'><h4 id='method.empty' class='method'><code>fn <a href='#method.empty' class='fnname'>empty</a>() -&gt; <a class='struct' href='../../rusty_data/datatable/struct.DataTable.html' title='rusty_data::datatable::DataTable'>DataTable</a></code></h4>
+<div class='docblock'><p>Constructs an empty DataTable</p>
+</div><h4 id='method.cols' class='method'><code>fn <a href='#method.cols' class='fnname'>cols</a>(&amp;self) -&gt; <a href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code></h4>
+<div class='docblock'><p>The number of columns in the DataTable.</p>
+</div><h4 id='method.rows' class='method'><code>fn <a href='#method.rows' class='fnname'>rows</a>(&amp;self) -&gt; <a href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code></h4>
+<div class='docblock'><p>The number of rows in the DataTable.</p>
+</div><h4 id='method.shrink_to_fit' class='method'><code>fn <a href='#method.shrink_to_fit' class='fnname'>shrink_to_fit</a>(&amp;mut self)</code></h4>
+<div class='docblock'><p>Shrinks the table and it&#39;s underlying columns.</p>
+</div><h4 id='method.into_consistent_data' class='method'><code>fn <a href='#method.into_consistent_data' class='fnname'>into_consistent_data</a>&lt;T: <a class='trait' href='https://doc.rust-lang.org/nightly/core/str/trait.FromStr.html' title='core::str::FromStr'>FromStr</a>&gt;(self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;T&gt;, <a class='enum' href='../../rusty_data/datatable/enum.DataError.html' title='rusty_data::datatable::DataError'>DataError</a>&gt;</code></h4>
+<div class='docblock'><p>Consumes self and attempts to convert the DataTable into a single Vec.</p>
+
+<p>Uses column major ordering.</p>
+
+<h1 id='failures' class='section-header'><a href='#failures'>Failures</a></h1>
+<ul>
+<li>DataCastError : Returned when the data cannot be cast into the requested type.</li>
+</ul>
+</div><h4 id='method.consistent_data' class='method'><code>fn <a href='#method.consistent_data' class='fnname'>consistent_data</a>&lt;T: <a class='trait' href='https://doc.rust-lang.org/nightly/core/str/trait.FromStr.html' title='core::str::FromStr'>FromStr</a>&gt;(&amp;self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;T&gt;&gt;</code></h4>
+<div class='docblock'><p>Attempts to convert the DataTable into a single Vec.</p>
+
+<p>Uses column major ordering. Returns an Option.</p>
+</div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "rusty_data";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script async src="../../search-index.js"></script>
+</body>
+</html>

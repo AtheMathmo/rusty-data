@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Loader` struct in crate `rusty_data`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Loader">
+
+    <title>rusty_data::loader::Loader - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../index.html'>rusty_data</a>::<wbr><a href='index.html'>loader</a></p><script>window.sidebarCurrent = {name: 'Loader', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>rusty_data</a>::<wbr><a href='index.html'>loader</a>::<wbr><a class='struct' href=''>Loader</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-12' class='srclink' href='../../src/rusty_data/loader.rs.html#15-21' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Loader&lt;'a&gt; {
+    pub has_header: <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>,
+    pub delimiter: <a href='https://doc.rust-lang.org/nightly/std/primitive.char.html'>char</a>,
+    // some fields omitted
+}</pre><div class='docblock'><p>Loader struct</p>
+
+<p>Used to load and process data files into tables.</p>
+</div><h2 class='fields'>Fields</h2>
+<table><tr class='stab '>
+                                  <td id='structfield.has_header'><code>has_header</code></td><td><div class='docblock'><p>True if there are headers present in the file</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.delimiter'><code>delimiter</code></td><td><div class='docblock'><p>The delimiter character</p>
+</div></td></tr></table><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl&lt;'a&gt; <a class='struct' href='../../rusty_data/loader/struct.Loader.html' title='rusty_data::loader::Loader'>Loader</a>&lt;'a&gt;</code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(has_header: <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>, file: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, delimiter: <a href='https://doc.rust-lang.org/nightly/std/primitive.char.html'>char</a>) -&gt; <a class='struct' href='../../rusty_data/loader/struct.Loader.html' title='rusty_data::loader::Loader'>Loader</a></code></h4>
+<div class='docblock'><p>Constructs a new Loader.</p>
+</div><h4 id='method.load_file' class='method'><code>fn <a href='#method.load_file' class='fnname'>load_file</a>(self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../../rusty_data/datatable/struct.DataTable.html' title='rusty_data::datatable::DataTable'>DataTable</a>, <a class='struct' href='https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html' title='std::io::error::Error'>Error</a>&gt;</code></h4>
+<div class='docblock'><p>Load the file from the loader with given delimiter.</p>
+
+<p>Pretty rudimentary with poor error handling.</p>
+
+<h1 id='panics' class='section-header'><a href='#panics'>Panics</a></h1>
+<ul>
+<li>The input data is not a float.</li>
+</ul>
+
+<h1 id='failures' class='section-header'><a href='#failures'>Failures</a></h1>
+<ul>
+<li>The input data is malformed (missing data, non-uniform rows etc.)</li>
+</ul>
+</div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "rusty_data";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script async src="../../search-index.js"></script>
+</body>
+</html>

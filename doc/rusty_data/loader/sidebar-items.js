@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["load_file","Load the specified file to a DataTable."]],"struct":[["Loader","Loader struct"]]});

@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["DataError","Errors related to Data functions."]],"struct":[["DataColumn","A data column consisting of Strings."],["DataTable","A data table consisting of varying column types and headers."]]});
