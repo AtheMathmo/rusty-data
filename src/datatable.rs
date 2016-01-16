@@ -1,8 +1,8 @@
 use std::str::FromStr;
 use std::error::Error;
 use std::fmt;
-
-use std::marker::PhantomData;
+use std::vec::IntoIter;
+use std;
 
 /// A data table consisting of varying column types and headers.
 pub struct DataTable {
@@ -80,9 +80,7 @@ pub struct DataColumn {
 
 impl DataColumn {
     pub fn empty() -> DataColumn {
-        DataColumn {
-            data: Vec::new(),
-        }
+        DataColumn { data: Vec::new() }
     }
 
     pub fn len(&self) -> usize {
@@ -127,34 +125,32 @@ impl DataColumn {
         self.data.shrink_to_fit();
     }
 
-    pub fn into_iter<T: FromStr>(self) -> IntoColumnIterator<T> {
-        IntoColumnIterator {
-            column_data: self.data,
-            index: 0usize,
-            phantom: PhantomData::<T>,
-        }
+    /// Consumes self and returns an iterator which parses
+    /// the data to the specified type returning results.
+    ///
+    /// The iterator will return a result on `next()` detailing
+    /// the outcome of the parse.
+    pub fn into_iter_cast<U: FromStr>
+        (self)
+         -> std::iter::Map<IntoIter<String>, fn(String) -> Result<U, <U as FromStr>::Err>>
+        where U: FromStr
+    {
+        from_str_iter::<_, U>(self.data.into_iter())
     }
 }
 
-pub struct IntoColumnIterator<T : FromStr> {
-    column_data: Vec<String>,
-    index: usize,
-    phantom: PhantomData<T>,
-}
-
-impl<T : FromStr> Iterator for IntoColumnIterator<T> {
-    type Item = T;
-    
-    fn next(&mut self) -> Option<T> {
-        match self.column_data.get(self.index) {
-            None => None,
-            Some(elt) => {
-                self.index += 1;
-                match T::from_str(&elt[..]) {
-                    Ok(x) => Some(x),
-                    Err(_) => None,
-                }
-            }
-        }
+fn from_str_iter<I, U>
+    (iter: I)
+     -> std::iter::Map<I, fn(<I as Iterator>::Item) -> Result<U, <U as FromStr>::Err>>
+    where I: Iterator,
+          <I as Iterator>::Item: AsRef<str>,
+          U: FromStr
+{
+    fn from_str_fn<T, U>(item: T) -> Result<U, <U as FromStr>::Err>
+        where T: AsRef<str>,
+              U: FromStr
+    {
+        FromStr::from_str(item.as_ref())
     }
+    iter.map(from_str_fn)
 }
