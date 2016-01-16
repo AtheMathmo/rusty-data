@@ -58,7 +58,7 @@ impl<'a> Loader<'a> {
             for (i, val) in values.enumerate() {
                 idx = i;
                 if idx > table.cols() {
-                    return Err(Error::new(ErrorKind::InvalidInput, "Malformed data format on."));
+                    return Err(Error::new(ErrorKind::InvalidInput, "Malformed data format."));
                 }
 
                 table.data_cols[idx].push(val);
