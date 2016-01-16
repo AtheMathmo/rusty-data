@@ -1,3 +1,8 @@
+//! The loader module
+//!
+//! Provides the Loader struct which is used to read data into
+//! DataTables.
+
 use std::io;
 use std::io::prelude::*;
 use std::io::{BufReader, Error, ErrorKind};
@@ -8,12 +13,24 @@ use datatable::*;
 ///
 /// Used to load and process data files into tables.
 pub struct Loader<'a> {
-    pub header: bool,
-    pub file: &'a str,
+    /// True if there are headers present in the file
+    pub has_header: bool,
+    file: &'a str,
+    /// The delimiter character
     pub delimiter: char,
 }
 
 impl<'a> Loader<'a> {
+
+    /// Constructs a new Loader.
+    pub fn new(has_header: bool, file: &str, delimiter: char) -> Loader {
+        Loader {
+            has_header: has_header,
+            file: file,
+            delimiter: delimiter,
+        }
+    }
+
     /// Load the file from the loader with given delimiter.
     ///
     /// Pretty rudimentary with poor error handling.
@@ -31,21 +48,33 @@ impl<'a> Loader<'a> {
 
         let mut table = DataTable::empty();
 
-        // Should handle header here
+
 
         let mut lines = reader.lines();
 
-        if let Some(line) = lines.next() {
-            let line = try!(line);
-            let values = line.split(self.delimiter);
+        if self.has_header {
+            if let Some(line) = lines.next() {
+                let line = try!(line);
+                let values = line.split(self.delimiter);
 
-            for val in values {
-                let mut column = DataColumn::empty();
-                // Unwrap and panic for now.
-                // Should handle more carefully in future.
-                column.push(val);
+                for val in values {
+                    let mut column = DataColumn::empty();
+                    column.name = Some(val.to_owned());
+                    table.data_cols.push(column);
+                }
+            }
+        }
+        else {
+            if let Some(line) = lines.next() {
+                let line = try!(line);
+                let values = line.split(self.delimiter);
 
-                table.data_cols.push(column);
+                for val in values {
+                    let mut column = DataColumn::empty();
+                    column.push(val);
+
+                    table.data_cols.push(column);
+                }
             }
         }
 
@@ -85,7 +114,7 @@ impl<'a> Loader<'a> {
 /// ```
 pub fn load_file(file: &str) -> DataTable {
     let loader = Loader {
-        header: false,
+        has_header: false,
         file: file,
         delimiter: ',',
     };
