@@ -1,5 +1,3 @@
-use num;
-use num::traits::NumCast;
 use std::str::FromStr;
 use std::error::Error;
 use std::fmt;
@@ -27,6 +25,7 @@ impl DataTable {
         0usize
     }
 
+    /// Shrinks the table and it's underlying
     pub fn shrink_to_fit(&mut self) {
         for col in self.data_cols.iter_mut() {
             col.shrink_to_fit();
@@ -34,13 +33,24 @@ impl DataTable {
 
         self.data_cols.shrink_to_fit();
     }
+
+    /// Attempt to convert the data table into a single Vec.
+    ///
+    /// Uses column major ordering.
+    pub fn into_consistent_data<T: FromStr>(self) -> Result<Vec<T>, DataCastError> {
+        let mut table_data = Vec::with_capacity(self.cols() * self.rows());
+        for d in self.data_cols.into_iter() {
+            match d.into_vec() {
+                Ok(x) => table_data.extend(x),
+                Err(e) => return Err(e),
+            }
+        }
+
+        Ok(table_data)
+    }
 }
 
-/// A data column with a consistent data type. 
-pub struct DataColumn {
-    pub data: Vec<String>,
-}
-
+/// An error for attempting an into conversion.
 #[derive(Debug)]
 pub struct DataCastError;
 
@@ -56,6 +66,11 @@ impl Error for DataCastError {
     }
 }
 
+/// A data column with a consistent data type. 
+pub struct DataColumn {
+    data: Vec<String>,
+}
+
 impl DataColumn {
     pub fn empty() -> DataColumn {
         DataColumn {
@@ -65,6 +80,10 @@ impl DataColumn {
 
     pub fn len(&self) -> usize {
         self.data.len()
+    }
+
+    pub fn data(&self) -> &Vec<String> {
+        &self.data
     }
 
     pub fn push(&mut self, val: &str) {
