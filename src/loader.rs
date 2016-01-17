@@ -21,13 +21,26 @@ pub struct Loader<'a> {
 }
 
 impl<'a> Loader<'a> {
-
     /// Constructs a new Loader.
     pub fn new(has_header: bool, file: &str, delimiter: char) -> Loader {
         Loader {
             has_header: has_header,
             file: file,
             delimiter: delimiter,
+        }
+    }
+
+    /// Creates a loader with default settings from a file string.
+    ///
+    /// The default settings are as follows:
+    ///
+    /// - has_header : false
+    /// - delimiter : ','
+    pub fn from_file_string(file_string: &str) -> Loader {
+        Loader {
+            has_header: false,
+            file: file_string,
+            delimiter: ',',
         }
     }
 
@@ -63,8 +76,7 @@ impl<'a> Loader<'a> {
                     table.data_cols.push(column);
                 }
             }
-        }
-        else {
+        } else {
             if let Some(line) = lines.next() {
                 let line = try!(line);
                 let values = line.split(self.delimiter);
@@ -93,7 +105,7 @@ impl<'a> Loader<'a> {
                 table.data_cols[idx].push(val);
             }
 
-            if idx != table.cols()-1 {
+            if idx != table.cols() - 1 {
                 return Err(Error::new(ErrorKind::InvalidInput, "Malformed data format."));
             }
         }
