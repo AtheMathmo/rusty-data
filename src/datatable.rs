@@ -133,6 +133,13 @@ impl DataColumn {
         self.data.push(val.to_owned());
     }
 
+    pub fn get_as<T: FromStr>(&self, idx: usize) -> Result<T, DataError> {
+        match T::from_str(self.data[idx].as_ref()) {
+            Ok(x) => Ok(x),
+            Err(_) => Err(DataError::DataCastError),
+        }
+    }
+
     /// Shrink the column to fit the data.
     pub fn shrink_to_fit(&mut self) {
         self.data.shrink_to_fit();
@@ -147,7 +154,7 @@ impl DataColumn {
         let mut casted_data = Vec::<T>::with_capacity(self.data.len());
 
         for d in self.data.into_iter() {
-            match T::from_str(&d[..]) {
+            match T::from_str(d.as_ref()) {
                 Ok(x) => casted_data.push(x),
                 Err(_) => return Err(DataError::DataCastError),
             }
