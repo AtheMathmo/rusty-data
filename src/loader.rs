@@ -7,26 +7,47 @@ use std::io;
 use std::io::prelude::*;
 use std::io::{BufReader, Error, ErrorKind};
 use std::fs::File;
+
 use datatable::*;
 
+pub struct LoaderOptions {
+    /// True if there are headers present in the file
+    pub has_header: bool,
+    /// The delimiter character
+    pub delimiter: char,
+    /// The quote character
+    pub quote_marker: Option<char>,
+}
+
+impl Default for LoaderOptions {
+    fn default() -> LoaderOptions {
+        LoaderOptions {
+            has_header: false,
+            delimiter: ',',
+            quote_marker: None,
+        }
+    }
+}
 /// Loader struct
 ///
 /// Used to load and process data files into tables.
 pub struct Loader<'a> {
-    /// True if there are headers present in the file
-    pub has_header: bool,
     file: &'a str,
-    /// The delimiter character
-    pub delimiter: char,
+    options: LoaderOptions,
 }
 
 impl<'a> Loader<'a> {
     /// Constructs a new Loader.
     pub fn new(has_header: bool, file: &str, delimiter: char) -> Loader {
-        Loader {
+        let options = LoaderOptions {
             has_header: has_header,
-            file: file,
             delimiter: delimiter,
+            quote_marker: None,
+        };
+
+        Loader {
+            file: file,
+            options: options,
         }
     }
 
@@ -38,9 +59,8 @@ impl<'a> Loader<'a> {
     /// - delimiter : ','
     pub fn from_file_string(file_string: &str) -> Loader {
         Loader {
-            has_header: false,
             file: file_string,
-            delimiter: ',',
+            options: LoaderOptions::default(),
         }
     }
 
@@ -61,25 +81,27 @@ impl<'a> Loader<'a> {
 
         let mut table = DataTable::empty();
 
-
-
         let mut lines = reader.lines();
 
-        if self.has_header {
+        if self.options.has_header {
             if let Some(line) = lines.next() {
                 let line = try!(line);
-                let values = line.split(self.delimiter);
+                let values = LineSplitIter::new(line.to_string(),
+                                                self.options.quote_marker,
+                                                self.options.delimiter);
 
                 for val in values {
                     let mut column = DataColumn::empty();
-                    column.name = Some(val.to_owned());
+                    column.name = Some(val);
                     table.data_cols.push(column);
                 }
             }
         } else {
             if let Some(line) = lines.next() {
                 let line = try!(line);
-                let values = line.split(self.delimiter);
+                let values = LineSplitIter::new(line.to_string(),
+                                                self.options.quote_marker,
+                                                self.options.delimiter);
 
                 for val in values {
                     let mut column = DataColumn::empty();
@@ -92,7 +114,10 @@ impl<'a> Loader<'a> {
 
         for line in lines {
             let line = try!(line);
-            let values = line.split(self.delimiter);
+            let values = LineSplitIter::new(line.to_string(),
+                                                self.options.quote_marker,
+                                                self.options.delimiter);
+
 
             let mut idx = 0usize;
 
@@ -115,6 +140,64 @@ impl<'a> Loader<'a> {
     }
 }
 
+pub struct LineSplitIter {
+    line: String,
+    quote_char: Option<char>,
+    delimiter: char,
+}
+
+impl LineSplitIter {
+    pub fn new(line: String, quote_char: Option<char>, delimiter: char) -> LineSplitIter {
+        LineSplitIter {
+            line: line,
+            quote_char: quote_char,
+            delimiter: delimiter,
+        }
+    }
+}
+
+impl Iterator for LineSplitIter {
+    type Item = String;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.line.len() == 0 {
+            return None;
+        }
+
+        let drain_offset: Option<usize>;
+        if let Some(quote_char) = self.quote_char {
+            let mut in_quotes = false;
+
+            drain_offset = self.line
+                               .find(|c| {
+                                   if c == quote_char {
+                                       in_quotes = !in_quotes;
+                                       false
+                                   } else if c == self.delimiter && !in_quotes {
+                                       true
+                                   } else {
+                                       false
+                                   }
+                               });
+
+        } else {
+            drain_offset = self.line.find(self.delimiter);
+        }
+
+        if let Some(offset) = drain_offset {
+            let t: String = self.line.drain(..offset).collect();
+            self.line = self.line[1..].to_string();
+
+            match self.quote_char {
+                None => Some(t),
+                Some(quote_char) => Some(t.trim_matches(quote_char).to_string()),
+            }
+        } else {
+            Some(self.line.drain(..).collect())
+        }
+    }
+}
+
 /// Load the specified file to a DataTable.
 ///
 /// # Examples
@@ -125,11 +208,7 @@ impl<'a> Loader<'a> {
 /// let table = load_file("path/to/file.data");
 /// ```
 pub fn load_file(file: &str) -> DataTable {
-    let loader = Loader {
-        has_header: false,
-        file: file,
-        delimiter: ',',
-    };
+    let loader = Loader::from_file_string(file);
 
     loader.load_file().unwrap()
 
