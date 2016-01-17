@@ -129,8 +129,8 @@ impl DataColumn {
     }
 
     /// Pushes a new &str to the column.
-    pub fn push(&mut self, val: &str) {
-        self.data.push(val.to_owned());
+    pub fn push(&mut self, val: String) {
+        self.data.push(val);
     }
 
     pub fn get_as<T: FromStr>(&self, idx: usize) -> Result<T, DataError> {
