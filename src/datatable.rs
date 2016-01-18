@@ -55,31 +55,43 @@ impl DataTable {
     /// # Failures
     ///
     /// - DataCastError : Returned when the data cannot be cast into the requested type.
-    pub fn into_consistent_data<T: FromStr>(self) -> Result<Vec<T>, DataError> {
-        let mut table_data = Vec::with_capacity(self.cols() * self.rows());
-        for d in self.data_cols.into_iter() {
-            match d.into_vec() {
-                Ok(x) => table_data.extend(x),
-                Err(e) => return Err(e),
+    pub fn into_consistent_data<T: FromStr>(self, row_major: bool) -> Result<Vec<T>, DataError> {
+        let cols = self.cols();
+        let rows = self.rows();
+
+        let mut table_data = Vec::with_capacity(cols * rows);
+        if row_major {
+            let mut column_iters = Vec::new();
+
+            for d in self.data_cols.into_iter() {
+                column_iters.push(d.into_iter_cast::<T>());
+            }
+
+            for _ in 0..rows {
+                for i in 0..cols {
+                    match column_iters[i].next() {
+                        Some(Ok(x)) => table_data.push(x),
+                        Some(Err(_)) => return Err(DataError::DataCastError),
+                        None =>{},
+                    }
+                }
             }
         }
+        else {
+            for d in self.data_cols.into_iter() {
+                match d.into_vec() {
+                    Ok(x) => table_data.extend(x),
+                    Err(e) => return Err(e),
+                }
+            }
+        }
+
+        if table_data.len() != cols*rows {
+            return Err(DataError::InvalidStateError);
+        }
+        
 
         Ok(table_data)
-    }
-
-    /// Attempts to convert the DataTable into a single Vec.
-    ///
-    /// Uses column major ordering. Returns an Option.
-    pub fn consistent_data<T: FromStr>(&self) -> Option<Vec<T>> {
-        let mut table_data = Vec::with_capacity(self.cols() * self.rows());
-        for d in self.data_cols.iter() {
-            match d.cast() {
-                Some(x) => table_data.extend(x),
-                None => return None,
-            }
-        }
-
-        Some(table_data)
     }
 }
 
