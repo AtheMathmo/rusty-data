@@ -3,10 +3,11 @@
 //! Contains the DataTable struct and provides methods
 //! for converting the tables to various formats.
 
-use std::str::FromStr;
-use std::vec::IntoIter;
-use std::collections::HashMap;
 use std;
+use std::collections::HashMap;
+use std::str::FromStr;
+use std::ops::Index;
+use std::vec::IntoIter;
 
 use num::traits::{One, Zero};
 
@@ -79,6 +80,14 @@ impl DataTable {
         }
 
         Some(table_data)
+    }
+}
+
+impl Index<usize> for DataTable { 
+    type Output = DataColumn;
+
+    fn index(&self, idx: usize) -> &DataColumn {
+        &self.data_cols[idx]
     }
 }
 
@@ -287,4 +296,11 @@ fn from_str_iter<I, U>
         FromStr::from_str(item.as_ref())
     }
     iter.map(from_str_fn)
+}
+
+impl Index<usize> for DataColumn { 
+    type Output = String;
+    fn index(&self, idx: usize) -> &String {
+        &self.data[idx]
+    }
 }
