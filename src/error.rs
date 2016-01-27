@@ -1,3 +1,5 @@
+//! Module for errors within the rusty-data crate.
+
 use std::fmt;
 use std::error::Error;
 

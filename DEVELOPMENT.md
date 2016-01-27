@@ -13,3 +13,4 @@ This document's intention is to keep track of future development goals. For now 
 *Now things get less certain*
 - Implement some kind of Series<T> struct which can be created from DataColumns and has a concrete generic type. The motivation being we can implement mean() and similar functions.
 - Use and_then/or_else for control flow based on file loading attempts. Could try a few sensible defaults and if it fails just return the Err.
+- Implement DataViews.

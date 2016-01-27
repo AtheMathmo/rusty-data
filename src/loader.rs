@@ -10,6 +10,7 @@ use std::fs::File;
 
 use datatable::*;
 
+/// Options used to fine tune the file loading
 pub struct LoaderOptions {
     /// True if there are headers present in the file
     pub has_header: bool,
@@ -140,6 +141,7 @@ impl<'a> Loader<'a> {
     }
 }
 
+/// Iterator to parse a line in a data file.
 pub struct LineSplitIter {
     line: String,
     quote_char: Option<char>,
@@ -147,6 +149,8 @@ pub struct LineSplitIter {
 }
 
 impl LineSplitIter {
+    /// Construct a new LineSplitIter over the specified line using
+    /// the given quote character and delimiter.
     pub fn new(line: String, quote_char: Option<char>, delimiter: char) -> LineSplitIter {
         LineSplitIter {
             line: line,

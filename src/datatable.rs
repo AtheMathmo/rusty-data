@@ -155,7 +155,7 @@ impl DataColumn {
     /// dc.update_categories();
     /// let categories = dc.categories().unwrap();
     ///
-    /// // Note that contains requires a reference so we pass an &str.
+    /// // Note that `contains` requires a reference so we pass an &str.
     /// assert!(categories.contains_key("Class2"));
     /// assert_eq!(categories.len(), 2);
     /// ```
