@@ -3,11 +3,15 @@
 //! Contains the DataTable struct and provides methods
 //! for converting the tables to various formats.
 
-use std::str::FromStr;
-use std::error::Error;
-use std::fmt;
-use std::vec::IntoIter;
 use std;
+use std::collections::HashMap;
+use std::str::FromStr;
+use std::ops::Index;
+use std::vec::IntoIter;
+
+use num::traits::{One, Zero};
+
+use error::DataError;
 
 /// A data table consisting of varying column types and headers.
 pub struct DataTable {
@@ -51,54 +55,51 @@ impl DataTable {
     /// # Failures
     ///
     /// - DataCastError : Returned when the data cannot be cast into the requested type.
-    pub fn into_consistent_data<T: FromStr>(self) -> Result<Vec<T>, DataError> {
-        let mut table_data = Vec::with_capacity(self.cols() * self.rows());
-        for d in self.data_cols.into_iter() {
-            match d.into_vec() {
-                Ok(x) => table_data.extend(x),
-                Err(e) => return Err(e),
+    pub fn into_consistent_data<T: FromStr>(self, row_major: bool) -> Result<Vec<T>, DataError> {
+        let cols = self.cols();
+        let rows = self.rows();
+
+        let mut table_data = Vec::with_capacity(cols * rows);
+        if row_major {
+            let mut column_iters = Vec::new();
+
+            for d in self.data_cols.into_iter() {
+                column_iters.push(d.into_iter_cast::<T>());
+            }
+
+            for _ in 0..rows {
+                for i in 0..cols {
+                    match column_iters[i].next() {
+                        Some(Ok(x)) => table_data.push(x),
+                        Some(Err(_)) => return Err(DataError::DataCastError),
+                        None =>{},
+                    }
+                }
             }
         }
+        else {
+            for d in self.data_cols.into_iter() {
+                match d.into_vec() {
+                    Ok(x) => table_data.extend(x),
+                    Err(e) => return Err(e),
+                }
+            }
+        }
+
+        if table_data.len() != cols*rows {
+            return Err(DataError::InvalidStateError);
+        }
+        
 
         Ok(table_data)
     }
-
-    /// Attempts to convert the DataTable into a single Vec.
-    ///
-    /// Uses column major ordering. Returns an Option.
-    pub fn consistent_data<T: FromStr>(&self) -> Option<Vec<T>> {
-        let mut table_data = Vec::with_capacity(self.cols() * self.rows());
-        for d in self.data_cols.iter() {
-            match d.cast() {
-                Some(x) => table_data.extend(x),
-                None => return None,
-            }
-        }
-
-        Some(table_data)
-    }
 }
 
-/// Errors related to Data functions.
-#[derive(Debug)]
-pub enum DataError {
-    /// An error for attempting to cast data types within DataTable.
-    DataCastError,
-}
+impl Index<usize> for DataTable { 
+    type Output = DataColumn;
 
-impl fmt::Display for DataError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            &DataError::DataCastError => write!(f, "DataCastError"),
-        }
-    }
-}
-
-impl Error for DataError {
-    fn description(&self) -> &str {
-        match self {
-            &DataError::DataCastError => "Failed to cast data.",
-        }
+    fn index(&self, idx: usize) -> &DataColumn {
+        &self.data_cols[idx]
     }
 }
 
@@ -106,6 +107,7 @@ impl Error for DataError {
 pub struct DataColumn {
     /// The name associated with the DataColumn.
     pub name: Option<String>,
+    categories: Option<HashMap<String, usize>>,
     data: Vec<String>,
 }
 
@@ -114,6 +116,7 @@ impl DataColumn {
     pub fn empty() -> DataColumn {
         DataColumn {
             name: None,
+            categories: None,
             data: Vec::new(),
         }
     }
@@ -128,9 +131,113 @@ impl DataColumn {
         &self.data
     }
 
+    /// Gets an immutable reference to the categories Option.
+    pub fn categories(&self) -> Option<HashMap<String, usize>> {
+        match self.categories {
+            None => None,
+            Some(ref x) => Some(x.clone()),
+        }
+    }
+
+    /// Update the categories set using the current data.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rusty_data::datatable::DataColumn;
+    ///
+    /// let mut dc = DataColumn::empty();
+    ///
+    /// dc.push("Class1".to_string());
+    /// dc.push("Class2".to_string());
+    /// dc.push("Class2".to_string());
+    ///
+    /// dc.update_categories();
+    /// let categories = dc.categories().unwrap();
+    ///
+    /// // Note that `contains` requires a reference so we pass an &str.
+    /// assert!(categories.contains_key("Class2"));
+    /// assert_eq!(categories.len(), 2);
+    /// ```
+    pub fn update_categories(&mut self) {
+        let mut categories = HashMap::new();
+        let mut count = 0usize;
+
+        for s in self.data.iter() {
+            if !categories.contains_key(s) {
+                categories.insert(s.clone(), count);
+                count += 1usize;
+            }
+
+        }
+        categories.shrink_to_fit();
+        self.categories = Some(categories);
+    }
+
+    /// Produce a numerical vector representation of the category data.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rusty_data::datatable::DataColumn;
+    ///
+    /// let mut dc = DataColumn::empty();
+    ///
+    /// dc.push("Class1".to_string());
+    /// dc.push("Class2".to_string());
+    /// dc.push("Class2".to_string());
+    ///
+    /// dc.update_categories();
+    ///
+    /// let data = dc.numeric_category_data::<f64>().unwrap();
+    ///
+    /// println!("The data is: {:?}", data);
+    /// ```
+    pub fn numeric_category_data<T: Zero + One>(&self) -> Result<Vec<Vec<T>>, DataError> {
+        if let Some(ref categories) = self.categories {
+            let mut outer_vec = Vec::new();
+
+            for _ in 0..categories.len() {
+                outer_vec.push(Vec::<T>::new())
+            }
+
+            for d in self.data.iter() {
+                match categories.get(d) {
+                    Some(x) => {
+                        for i in 0..categories.len() {
+                            if *x == i {
+                                outer_vec[i].push(T::one());
+                            } else {
+                                outer_vec[i].push(T::zero());
+                            }
+                        }
+                    }
+                    None => {
+                        return Err(DataError::InvalidStateError);
+                    }
+                }
+            }
+            return Ok(outer_vec);
+        }
+
+        Err(DataError::InvalidStateError)
+    }
+
     /// Pushes a new &str to the column.
-    pub fn push(&mut self, val: &str) {
-        self.data.push(val.to_owned());
+    pub fn push(&mut self, val: String) {
+        self.data.push(val);
+    }
+
+    /// Try to get the element at the index as the requested type.
+    ///
+    /// # Failures
+    ///
+    /// - DataCastError : The element at the given index could not be parsed to this type. 
+    pub fn get_as<T: FromStr>(&self, idx: usize) -> Result<T, DataError> {
+        match T::from_str(self.data[idx].as_ref()) {
+            Ok(x) => Ok(x),
+            Err(_) => Err(DataError::DataCastError),
+        }
     }
 
     /// Shrink the column to fit the data.
@@ -147,7 +254,7 @@ impl DataColumn {
         let mut casted_data = Vec::<T>::with_capacity(self.data.len());
 
         for d in self.data.into_iter() {
-            match T::from_str(&d[..]) {
+            match T::from_str(d.as_ref()) {
                 Ok(x) => casted_data.push(x),
                 Err(_) => return Err(DataError::DataCastError),
             }
@@ -201,4 +308,11 @@ fn from_str_iter<I, U>
         FromStr::from_str(item.as_ref())
     }
     iter.map(from_str_fn)
+}
+
+impl Index<usize> for DataColumn { 
+    type Output = String;
+    fn index(&self, idx: usize) -> &String {
+        &self.data[idx]
+    }
 }
