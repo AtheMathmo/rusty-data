@@ -9,6 +9,7 @@
 
     <title>rusty_data::datatable::DataTable - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../main.css">
 
     
@@ -45,7 +46,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-71' class='srclink' href='../../src/rusty_data/datatable.rs.html#13-16' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-103' class='srclink' href='../../src/rusty_data/datatable.rs.html#17-20' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct DataTable {
     pub data_cols: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../../rusty_data/datatable/struct.DataColumn.html' title='rusty_data::datatable::DataColumn'>DataColumn</a>&gt;,
 }</pre><div class='docblock'><p>A data table consisting of varying column types and headers.</p>
@@ -54,13 +55,13 @@
                                   <td id='structfield.data_cols'><code>data_cols</code></td><td><div class='docblock'><p>Vector of DataColumns.</p>
 </div></td></tr></table><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../../rusty_data/datatable/struct.DataTable.html' title='rusty_data::datatable::DataTable'>DataTable</a></code></h3><div class='impl-items'><h4 id='method.empty' class='method'><code>fn <a href='#method.empty' class='fnname'>empty</a>() -&gt; <a class='struct' href='../../rusty_data/datatable/struct.DataTable.html' title='rusty_data::datatable::DataTable'>DataTable</a></code></h4>
 <div class='docblock'><p>Constructs an empty DataTable</p>
-</div><h4 id='method.cols' class='method'><code>fn <a href='#method.cols' class='fnname'>cols</a>(&amp;self) -&gt; <a href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code></h4>
+</div><h4 id='method.cols' class='method'><code>fn <a href='#method.cols' class='fnname'>cols</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code></h4>
 <div class='docblock'><p>The number of columns in the DataTable.</p>
-</div><h4 id='method.rows' class='method'><code>fn <a href='#method.rows' class='fnname'>rows</a>(&amp;self) -&gt; <a href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code></h4>
+</div><h4 id='method.rows' class='method'><code>fn <a href='#method.rows' class='fnname'>rows</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code></h4>
 <div class='docblock'><p>The number of rows in the DataTable.</p>
 </div><h4 id='method.shrink_to_fit' class='method'><code>fn <a href='#method.shrink_to_fit' class='fnname'>shrink_to_fit</a>(&amp;mut self)</code></h4>
 <div class='docblock'><p>Shrinks the table and it&#39;s underlying columns.</p>
-</div><h4 id='method.into_consistent_data' class='method'><code>fn <a href='#method.into_consistent_data' class='fnname'>into_consistent_data</a>&lt;T: <a class='trait' href='https://doc.rust-lang.org/nightly/core/str/trait.FromStr.html' title='core::str::FromStr'>FromStr</a>&gt;(self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;T&gt;, <a class='enum' href='../../rusty_data/datatable/enum.DataError.html' title='rusty_data::datatable::DataError'>DataError</a>&gt;</code></h4>
+</div><h4 id='method.into_consistent_data' class='method'><code>fn <a href='#method.into_consistent_data' class='fnname'>into_consistent_data</a>&lt;T: <a class='trait' href='https://doc.rust-lang.org/nightly/core/str/trait.FromStr.html' title='core::str::FromStr'>FromStr</a>&gt;(self, row_major: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;T&gt;, <a class='enum' href='../../rusty_data/error/enum.DataError.html' title='rusty_data::error::DataError'>DataError</a>&gt;</code></h4>
 <div class='docblock'><p>Consumes self and attempts to convert the DataTable into a single Vec.</p>
 
 <p>Uses column major ordering.</p>
@@ -69,11 +70,9 @@
 <ul>
 <li>DataCastError : Returned when the data cannot be cast into the requested type.</li>
 </ul>
-</div><h4 id='method.consistent_data' class='method'><code>fn <a href='#method.consistent_data' class='fnname'>consistent_data</a>&lt;T: <a class='trait' href='https://doc.rust-lang.org/nightly/core/str/trait.FromStr.html' title='core::str::FromStr'>FromStr</a>&gt;(&amp;self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;T&gt;&gt;</code></h4>
-<div class='docblock'><p>Attempts to convert the DataTable into a single Vec.</p>
-
-<p>Uses column major ordering. Returns an Option.</p>
-</div></div></section>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Index.html' title='core::ops::Index'>Index</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>&gt; for <a class='struct' href='../../rusty_data/datatable/struct.DataTable.html' title='rusty_data::datatable::DataTable'>DataTable</a></code></h3><div class='impl-items'><h4 id='assoc_type.Output' class='type'><code>type Output = <a class='struct' href='../../rusty_data/datatable/struct.DataColumn.html' title='rusty_data::datatable::DataColumn'>DataColumn</a></code></h4>
+<h4 id='method.index' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Index.html#method.index' class='fnname'>index</a>(&amp;self, idx: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>) -&gt; &amp;<a class='struct' href='../../rusty_data/datatable/struct.DataColumn.html' title='rusty_data::datatable::DataColumn'>DataColumn</a></code></h4>
+</div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
@@ -132,6 +131,6 @@
     <script src="../../jquery.js"></script>
     <script src="../../main.js"></script>
     
-    <script async src="../../search-index.js"></script>
+    <script defer src="../../search-index.js"></script>
 </body>
 </html>

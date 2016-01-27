@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["datatable","The datatable module."],["loader","The loader module"]]});
+initSidebarItems({"mod":[["datatable","The datatable module."],["error","Module for errors within the rusty-data crate."],["loader","The loader module"]]});

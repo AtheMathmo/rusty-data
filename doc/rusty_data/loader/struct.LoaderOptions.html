@@ -4,15 +4,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `ParseFloatError` struct in crate `num`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, ParseFloatError">
+    <meta name="description" content="API documentation for the Rust `LoaderOptions` struct in crate `rusty_data`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, LoaderOptions">
 
-    <title>num::traits::ParseFloatError - Rust</title>
+    <title>rusty_data::loader::LoaderOptions - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../main.css">
 
-    <link rel="shortcut icon" href="http://rust-num.github.io/num/favicon.ico">
+    
     
 </head>
 <body class="rustdoc">
@@ -26,8 +26,8 @@
     
 
     <nav class="sidebar">
-        <a href='../../num/index.html'><img src='http://rust-num.github.io/num/rust-logo-128x128-blk-v2.png' alt='' width='100'></a>
-        <p class='location'><a href='../index.html'>num</a>::<wbr><a href='index.html'>traits</a></p><script>window.sidebarCurrent = {name: 'ParseFloatError', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        
+        <p class='location'><a href='../index.html'>rusty_data</a>::<wbr><a href='index.html'>loader</a></p><script>window.sidebarCurrent = {name: 'LoaderOptions', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -42,16 +42,25 @@
     </nav>
 
     <section id='main' class="content struct">
-<h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>num</a>::<wbr><a href='index.html'>traits</a>::<wbr><a class='struct' href=''>ParseFloatError</a></span><span class='out-of-band'><span id='render-detail'>
+<h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>rusty_data</a>::<wbr><a href='index.html'>loader</a>::<wbr><a class='struct' href=''>LoaderOptions</a></span><span class='out-of-band'><span id='render-detail'>
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-2127' class='srclink' href='../../src/num/traits.rs.html#50' title='goto source code'>[src]</a></span></h1>
-<pre class='rust struct'>pub struct ParseFloatError {
-    pub kind: <a class='enum' href='../../num/traits/enum.FloatErrorKind.html' title='num::traits::FloatErrorKind'>FloatErrorKind</a>,
-}</pre><h2 class='fields'>Fields</h2>
+        </span><a id='src-12' class='srclink' href='../../src/rusty_data/loader.rs.html#14-21' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct LoaderOptions {
+    pub has_header: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>,
+    pub delimiter: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.char.html'>char</a>,
+    pub quote_marker: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.char.html'>char</a>&gt;,
+}</pre><div class='docblock'><p>Options used to fine tune the file loading</p>
+</div><h2 class='fields'>Fields</h2>
 <table><tr class='stab '>
-                                  <td id='structfield.kind'><code>kind</code></td><td></td></tr></table></section>
+                                  <td id='structfield.has_header'><code>has_header</code></td><td><div class='docblock'><p>True if there are headers present in the file</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.delimiter'><code>delimiter</code></td><td><div class='docblock'><p>The delimiter character</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.quote_marker'><code>quote_marker</code></td><td><div class='docblock'><p>The quote character</p>
+</div></td></tr></table><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html' title='core::default::Default'>Default</a> for <a class='struct' href='../../rusty_data/loader/struct.LoaderOptions.html' title='rusty_data::loader::LoaderOptions'>LoaderOptions</a></code></h3><div class='impl-items'><h4 id='method.default' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html#method.default' class='fnname'>default</a>() -&gt; <a class='struct' href='../../rusty_data/loader/struct.LoaderOptions.html' title='rusty_data::loader::LoaderOptions'>LoaderOptions</a></code></h4>
+</div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
@@ -104,12 +113,12 @@
 
     <script>
         window.rootPath = "../../";
-        window.currentCrate = "num";
-        window.playgroundUrl = "http://play.rust-lang.org/";
+        window.currentCrate = "rusty_data";
+        window.playgroundUrl = "";
     </script>
     <script src="../../jquery.js"></script>
     <script src="../../main.js"></script>
-    <script src="../../playpen.js"></script>
+    
     <script defer src="../../search-index.js"></script>
 </body>
 </html>

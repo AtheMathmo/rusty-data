@@ -9,6 +9,7 @@
 
     <title>rusty_data::loader::Loader - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../main.css">
 
     
@@ -45,21 +46,23 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-12' class='srclink' href='../../src/rusty_data/loader.rs.html#15-21' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-18' class='srclink' href='../../src/rusty_data/loader.rs.html#35-38' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct Loader&lt;'a&gt; {
-    pub has_header: <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>,
-    pub delimiter: <a href='https://doc.rust-lang.org/nightly/std/primitive.char.html'>char</a>,
     // some fields omitted
 }</pre><div class='docblock'><p>Loader struct</p>
 
 <p>Used to load and process data files into tables.</p>
-</div><h2 class='fields'>Fields</h2>
-<table><tr class='stab '>
-                                  <td id='structfield.has_header'><code>has_header</code></td><td><div class='docblock'><p>True if there are headers present in the file</p>
-</div></td></tr><tr class='stab '>
-                                  <td id='structfield.delimiter'><code>delimiter</code></td><td><div class='docblock'><p>The delimiter character</p>
-</div></td></tr></table><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl&lt;'a&gt; <a class='struct' href='../../rusty_data/loader/struct.Loader.html' title='rusty_data::loader::Loader'>Loader</a>&lt;'a&gt;</code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(has_header: <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>, file: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, delimiter: <a href='https://doc.rust-lang.org/nightly/std/primitive.char.html'>char</a>) -&gt; <a class='struct' href='../../rusty_data/loader/struct.Loader.html' title='rusty_data::loader::Loader'>Loader</a></code></h4>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl&lt;'a&gt; <a class='struct' href='../../rusty_data/loader/struct.Loader.html' title='rusty_data::loader::Loader'>Loader</a>&lt;'a&gt;</code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(has_header: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>, file: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, delimiter: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.char.html'>char</a>) -&gt; <a class='struct' href='../../rusty_data/loader/struct.Loader.html' title='rusty_data::loader::Loader'>Loader</a></code></h4>
 <div class='docblock'><p>Constructs a new Loader.</p>
+</div><h4 id='method.from_file_string' class='method'><code>fn <a href='#method.from_file_string' class='fnname'>from_file_string</a>(file_string: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='struct' href='../../rusty_data/loader/struct.Loader.html' title='rusty_data::loader::Loader'>Loader</a></code></h4>
+<div class='docblock'><p>Creates a loader with default settings from a file string.</p>
+
+<p>The default settings are as follows:</p>
+
+<ul>
+<li>has_header : false</li>
+<li>delimiter : &#39;,&#39;</li>
+</ul>
 </div><h4 id='method.load_file' class='method'><code>fn <a href='#method.load_file' class='fnname'>load_file</a>(self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../../rusty_data/datatable/struct.DataTable.html' title='rusty_data::datatable::DataTable'>DataTable</a>, <a class='struct' href='https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html' title='std::io::error::Error'>Error</a>&gt;</code></h4>
 <div class='docblock'><p>Load the file from the loader with given delimiter.</p>
 
@@ -133,6 +136,6 @@
     <script src="../../jquery.js"></script>
     <script src="../../main.js"></script>
     
-    <script async src="../../search-index.js"></script>
+    <script defer src="../../search-index.js"></script>
 </body>
 </html>
